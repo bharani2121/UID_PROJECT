@@ -1,19 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import 'tw-elements';
-import PreviewFooter from './components/PreviewPage/PreviewFooter';
-import { toastContainer } from './components/toast-message/toast';
-import "react-toastify/dist/ReactToastify.css";
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router } from "react-router-dom";
+import { makeServer } from "./server";
+import { Provider } from "./context/";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+import App from "./App";
+
+// Call make Server
+makeServer();
+
+ReactDOM.render(
   <React.StrictMode>
-    <div className="container mx-auto md:px-20">
-      {toastContainer()}
-      <App />
-      <PreviewFooter />
-    </div>
-  </React.StrictMode>
+    <Router>
+      <Provider>
+        <App />
+      </Provider>
+    </Router>
+  </React.StrictMode>,
+  document.getElementById("root")
 );

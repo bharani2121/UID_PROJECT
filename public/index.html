@@ -2,32 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/automobile.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
     <meta
-      name="ASP"
-      content=""
+      name="description"
+      content="One stop for all your automobile accessories."
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>ASP | Let's Buy</title>
+
+    <!-- hydrogen  -->
+    <link rel="stylesheet" href="https://hydrogen-ui.netlify.app/style.css" />
+
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/jpg" href="./favicon.png" />
+
+    <title>AutoDecore</title>
   </head>
   <body>
-    <noscript></noscript>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <script src="./TW-ELEMENTS-PATH/dist/js/index.min.js"></script>
-    <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
-    <script type="text/javascript">
-      var tooltipTriggerList = [].slice.call(
-        document.querySelectorAll('[data-bs-toggle="tooltip"]')
-      );
-      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new Tooltip(tooltipTriggerEl);
-      });
-    </script>
-    <script>
-      (function(w, d) { w.CollectId = "62fce6d8f27acc1b8412a3dd"; var h = d.head || d.getElementsByTagName("head")[0]; var s = d.createElement("script"); s.setAttribute("type", "text/javascript"); s.async=true; s.setAttribute("src", "https://collectcdn.com/launcher.js"); h.appendChild(s); })(window, document);
-    </script>
+    <div id="modal"></div>
   </body>
 </html>

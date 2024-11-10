@@ -1,60 +1,102 @@
-import { createContext } from "react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import PreviewSite from "./pages/preview-page";
-import Items from "./pages/items";
-import Login from "./pages/login";
-import Profile from "./pages/profile";
-import Register from "./pages/signup";
-import PrivateRoutes from "./private-routes/PrivateRoutes";
-import Error404 from "./pages/error";
-import AdminHome from "./pages/admin-panel";
-import ReserveNow from "./pages/reservations/ReserveNow";
-import MyReservations from "./pages/reservations/MyReservations";
-import CreateItem from "./pages/items/CreateItem";
-import CreateQuestions from "./pages/questions/create-questions/CreateQuestions";
-import ListQuestions from "./pages/questions/list-questions/ListQuestions";
-import ViewQuestion from "./pages/questions/view-question/ViewQuestion";
-import ReservationRequests from "./pages/reservations/ReservationRequests";
-import QuestionReport from "./pages/question-report/QuestionReport";
-import ItemReport from "./pages/items/ItemReport";
-import ViewAllUsers from "./pages/admin-panel/view-users";
-import UsersReport from "./pages/users-report/UsersReport";
-import OrderReport from "./pages/reservations/OrderReport";
+import { Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 
-export const AuthContext = createContext();
+import {
+  Header,
+  Home,
+  ProductListing,
+  Cart,
+  Wishlist,
+  Login,
+  Signup,
+  Footer,
+  Error404,
+  Toast,
+  SingleProductPage,
+  UserProfile,
+  PersonalInfo,
+  Addresses,
+  Orders,
+  OrderSummary,
+  ScrollToTop,
+} from "./components";
 
-export default function App() {
+import {
+  getProducts,
+  getCategories,
+  getWishList,
+  getCart,
+} from "./utils/server-requests";
+import { useData, useAuth, useToast } from "./context";
+import { PrivateRoute } from "./PrivateRoute";
+
+import "./style.css";
+
+function App() {
+  const { dispatch } = useData();
+  const {
+    state: { token },
+  } = useAuth();
+  const {
+    toastMessage: { type, message },
+  } = useToast();
+
+  useEffect(() => {
+    getProducts(dispatch);
+    getCategories(dispatch);
+    getWishList(dispatch, token);
+    getCart(dispatch, token);
+  }, []);
+
   return (
-    <BrowserRouter>
+    <>
+      <Header />
+      <ScrollToTop />
       <Routes>
-        <Route exact element={<PrivateRoutes />}>
-          {/* add private routes here */}
-          <Route path="/items" element={<Items />} />
-          <Route path="/create-question" element={<CreateQuestions />} />
-          <Route path="/questions" element={<ListQuestions />} />
-          <Route path="/view-question/:id" element={<ViewQuestion />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/admin-panel" element={<AdminHome />} />
-          <Route path="/404" element={<Error404 />} />
-          <Route path="/home" element={<PreviewSite />} />
-
-          <Route path="/reserve/:id" element={<ReserveNow />} />
-          <Route path="/my-reservations" element={<MyReservations/>}/>
-          <Route path="/requests" element={<ReservationRequests/>}/>
-          <Route path="/order-report" element={<OrderReport/>}/>
-
-          <Route path="/createitem" element={<CreateItem/>}/>
-          <Route path="/questions-report" element={<QuestionReport/>}/>
-          <Route path="/items-report" element={<ItemReport/>}/>
-          <Route path="/users" element={<ViewAllUsers/>}/>
-          <Route path="/users-report" element={<UsersReport/>}/>
-        </Route>
-        {/* add public routes here */}
-        <Route path="/" element={<PreviewSite />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<ProductListing />} />
+        <Route path="/product/:id" element={<SingleProductPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        
+        <Route path="/signup" element={<Signup />} />
+        <Route path="*" element={<Error404 />} />
+
+        {/* private routes */}
+        <Route
+          path="/cart"
+          element={
+            <PrivateRoute>
+              <Cart />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/wishlist"
+          element={
+            <PrivateRoute>
+              <Wishlist />
+            </PrivateRoute>
+          }
+        />
+
+        <Route path="/profile" element={<UserProfile />}>
+          <Route path="/profile" element={<PersonalInfo />} />
+          <Route path="/profile/addresses" element={<Addresses />} />
+          <Route path="/profile/orders" element={<Orders />} />
+        </Route>
+
+        <Route
+          path="/order-summary"
+          element={
+            <PrivateRoute>
+              <OrderSummary />
+            </PrivateRoute>
+          }
+        />
       </Routes>
-    </BrowserRouter>
+      <Footer />
+      <Toast type={type} message={message} />
+    </>
   );
 }
+
+export default App;
